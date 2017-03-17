@@ -64,6 +64,7 @@ public class JourneyToTheMoon {
     private static void findGroups(List<List<Integer>> astronauts, int astronautNumber, int groupId, boolean visitedAstronaut[],
         AtomicLongMap<Integer> numberOfPeopleInCountry) {
 
+
         for (int i = 0; i < astronauts.get(astronautNumber).size(); ++i) {
 
             int astronaut = astronauts.get(astronautNumber).get(i);
@@ -73,6 +74,7 @@ public class JourneyToTheMoon {
                 numberOfPeopleInCountry.getAndIncrement(groupId);
                 findGroups(astronauts, astronaut, groupId, visitedAstronaut, numberOfPeopleInCountry);
             }
+
         }
     }
 }
