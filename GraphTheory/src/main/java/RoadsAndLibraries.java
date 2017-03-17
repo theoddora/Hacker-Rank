@@ -18,7 +18,7 @@ public class RoadsAndLibraries {
             this.costOfRoad = costOfRoad;
             roads = new ArrayList<>();
             for (int i = 0; i < numberOfCities; ++i) {
-                roads.add(new ArrayList<>());
+                roads.add(new ArrayList<Integer>());
             }
         }
 
@@ -75,11 +75,10 @@ public class RoadsAndLibraries {
             citiesMaps[i] = new CitiesMap(numberOfCities, costOfLibrary, costOfRoads);
 
             for (int j = 0; j < numberOfRoads; ++j) {
-                int city_1 = scan.nextInt();
-                int city_2 = scan.nextInt();
+                int cityOne = scan.nextInt(), cityTwo = scan.nextInt();
 
-                citiesMaps[i].getRoads().get(city_1 - 1).add(city_2 - 1);
-                citiesMaps[i].getRoads().get(city_2 - 1).add(city_1 - 1);
+                citiesMaps[i].getRoads().get(cityOne - 1).add(cityTwo - 1);
+                citiesMaps[i].getRoads().get(cityTwo - 1).add(cityOne - 1);
             }
         }
 
