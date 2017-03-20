@@ -9,75 +9,80 @@ public class JourneyToTheMoonWithoutGuava {
         int astronautsNumber = scan.nextInt();
         int pairs = scan.nextInt();
 
-        List<List<Integer>> astronauts = new ArrayList<>(astronautsNumber);
+        List<Integer> astronauts[] = new ArrayList[astronautsNumber];
+
         for (int i = 0; i < astronautsNumber; ++i) {
-            astronauts.add(new ArrayList<Integer>());
+            astronauts[i] = new ArrayList<>();
         }
 
-        boolean paired[] = new boolean[astronautsNumber];
+        Set<Integer> indexesOfPaired = new TreeSet<>();
         for (int i = 0; i < pairs; ++i) {
 
             int cityOne = scan.nextInt(), cityTwo = scan.nextInt();
-            astronauts.get(cityOne).add(cityTwo);
-            astronauts.get(cityTwo).add(cityOne);
-            paired[cityOne] = true;
-            paired[cityTwo] = true;
+            astronauts[cityOne].add(cityTwo);
+            astronauts[cityTwo].add(cityOne);
+            indexesOfPaired.add(cityOne);
+            indexesOfPaired.add(cityTwo);
         }
         scan.close();
 
         long numberOfPairs = 0;
-        Map<Integer, Long> peopleInGroups = findGroups(astronauts, paired);
+        Integer peopleInGroups[] = findGroups(astronauts, indexesOfPaired);
 
-        for (int i = 1; i <= peopleInGroups.size(); ++i) {
+        int numberOfNotPaired = astronauts.length - indexesOfPaired.size();
+
+        for (int i = 0; i < peopleInGroups.length; ++i) {
 
             int indexOfNext = i + 1;
 
-            while (indexOfNext <= peopleInGroups.size()) {
-                long currentNumberOfPairs = peopleInGroups.get(i);
-                currentNumberOfPairs *= peopleInGroups.get(indexOfNext);
+            while (indexOfNext < peopleInGroups.length) {
+                int currentNumberOfPairs = peopleInGroups[i];
+                currentNumberOfPairs *= peopleInGroups[indexOfNext];
                 numberOfPairs += currentNumberOfPairs;
                 indexOfNext++;
             }
+            numberOfPairs += peopleInGroups[i] * numberOfNotPaired;
+        }
+
+        while (numberOfNotPaired > 0) {
+            int sumOfOnes = --numberOfNotPaired;
+            numberOfPairs += sumOfOnes;
         }
 
         System.out.println(numberOfPairs);
     }
 
-    public static Map<Integer, Long> findGroups(List<List<Integer>> astronauts, boolean paired[]) {
+    public static Integer[] findGroups(List<Integer> astronauts[], Set<Integer> indexesOfPaired) {
 
-        Map<Integer, Long> numberOfPeopleInCountry = new HashMap<>();
+        Map<Integer, Integer> numberOfPeopleInCountry = new HashMap<>();
 
-        boolean visitedAstronaut[] = new boolean[astronauts.size()];
-        for (int i = 0, groupId = 0; i < astronauts.size(); ++i) {
+        boolean visitedAstronaut[] = new boolean[astronauts.length];
 
-            if(!paired[i]) {
-                numberOfPeopleInCountry.put(++groupId, 1L);
-                continue;
-            }
+        int groupId = 0;
+        for (Integer index : indexesOfPaired) {
 
-            if (!visitedAstronaut[i]) {
-                visitedAstronaut[i] = true;
-                numberOfPeopleInCountry.put(++groupId, 1L);
-                findGroups(astronauts, i, groupId, visitedAstronaut, numberOfPeopleInCountry);
+            if (!visitedAstronaut[index]) {
+                visitedAstronaut[index] = true;
+                numberOfPeopleInCountry.put(++groupId, 1);
+                findGroups(astronauts, index, groupId, visitedAstronaut, numberOfPeopleInCountry);
             }
         }
 
-        return numberOfPeopleInCountry;
+        return numberOfPeopleInCountry.values().toArray(new Integer[numberOfPeopleInCountry.values().size()]);
     }
 
-    private static void findGroups(List<List<Integer>> astronauts, int astronautNumber, int groupId, boolean visitedAstronaut[],
-        Map<Integer, Long> numberOfPeopleInCountry) {
+    private static void findGroups(List<Integer> astronauts[], int astronautNumber, int groupId, boolean visitedAstronaut[],
+        Map<Integer, Integer> numberOfPeopleInCountry) {
 
-        for (int i = 0; i < astronauts.get(astronautNumber).size(); ++i) {
+        for (int i = 0; i < astronauts[astronautNumber].size(); ++i) {
 
-            int astronaut = astronauts.get(astronautNumber).get(i);
+            int astronaut = astronauts[astronautNumber].get(i);
 
             if (!visitedAstronaut[astronaut]) {
                 visitedAstronaut[astronaut] = true;
                 numberOfPeopleInCountry.put(groupId, numberOfPeopleInCountry.get(groupId) + 1);
                 findGroups(astronauts, astronaut, groupId, visitedAstronaut, numberOfPeopleInCountry);
             }
-
         }
     }
 }
