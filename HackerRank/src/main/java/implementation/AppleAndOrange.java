@@ -31,6 +31,8 @@ public class AppleAndOrange {
         }
         System.out.println(fallenApples);
         System.out.println(fallenOranges);
+
+        sc.close();
     }
 
 }
