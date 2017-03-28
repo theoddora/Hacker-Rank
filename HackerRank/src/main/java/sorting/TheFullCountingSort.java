@@ -28,13 +28,12 @@ public class TheFullCountingSort {
         scan.close();
 
         StringBuilder sb = new StringBuilder();
-        Iterator<Map.Entry<Integer, List<String>>> iterator = helper.entrySet().iterator();
-        while (iterator.hasNext()) {
+        for (Map.Entry<Integer, List<String>> integerListEntry : helper.entrySet()) {
 
-            List<String> currentElement = iterator.next().getValue();
+            List<String> currentElement = integerListEntry.getValue();
 
-            for(int i = 0; i < currentElement.size(); ++i) {
-                sb.append(currentElement.get(i) + " ");
+            for (String aCurrentElement : currentElement) {
+                sb.append(aCurrentElement).append(" ");
             }
         }
         System.out.println(sb.toString());
