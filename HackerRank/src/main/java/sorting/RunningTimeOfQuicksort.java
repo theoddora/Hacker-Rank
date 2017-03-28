@@ -18,6 +18,8 @@ public class RunningTimeOfQuicksort {
             arrInsertion[i] = element;
         }
 
+        scan.close();
+
         int[] counterQuickSort = new int[] { 0 };
         int[] counterInsertionSort = new int[] { 0 };
 
