@@ -28,7 +28,7 @@ public class GradingStudents {
 
     public static void calculateGrades(int[] grades) {
 
-        int nextFiveMultiple = 0;
+        int nextFiveMultiple;
         for(int i = 0; i < grades.length; ++i) {
 
             if(grades[i] < 38) {
@@ -43,8 +43,8 @@ public class GradingStudents {
 
     public static void printResult(int[] grades) {
 
-        for(int i = 0; i < grades.length; ++i) {
-            System.out.println(grades[i]);
+        for (int grade : grades) {
+            System.out.println(grade);
         }
     }
 }
