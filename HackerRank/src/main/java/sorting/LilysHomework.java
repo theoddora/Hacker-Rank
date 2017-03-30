@@ -7,41 +7,79 @@ public class LilysHomework {
 
     public static void main(String[] args) {
 
-        int[] arrAsc = readInput();
-        int[] arrDsc = Arrays.copyOf(arrAsc, arrAsc.length);
-
         int[] swapsAsc = new int[1];
         int[] swapsDsc = new int[1];
 
-        int[] sortedArrAsc = Arrays.copyOf(arrAsc, arrAsc.length);
-        int[] sortedArrDsc = Arrays.copyOf(arrAsc, arrAsc.length);
+        int[] arrAsc = readInput();
 
-        Arrays.sort(sortedArrAsc);
-        reverseSortedArray(sortedArrDsc);
+        int[] arrDsc = Arrays.copyOf(arrAsc, arrAsc.length);
 
-        findSwapsAsc(arrAsc, sortedArrAsc, swapsAsc);
+        int asc = selectionSortAsc(arrAsc, swapsAsc);
+        int dsc = selectionSortDsc(arrDsc, swapsDsc);
+        System.out.println(asc < dsc ? asc : dsc);
 
-        System.out.println(swapsAsc[0]);
     }
 
-    private static void findSwapsAsc(int[] arr, int[] sortedArr, int[] swaps) {
-        for (int i = 0; i < arr.length; ++i) {
-            if (arr[i] != sortedArr[i]) {
-                swap(indexOf(sortedArr[i], arr), i, arr);
+    private static int selectionSortAsc(int[] arr, int[] swaps) {
+
+        for (int i = 0, j = arr.length - 1; i < arr.length - 1; ++i, --j) {
+            int currentMinIndex = i;
+            int currentMaxIndex = j;
+            for (int k = i + 1; k < j + 1; ++k) {
+                if (arr[k] < arr[currentMinIndex]) {
+                    currentMinIndex = k;
+                }
+                if (arr[k] > arr[currentMaxIndex]) {
+                    currentMaxIndex = k;
+                }
+            }
+            if (currentMaxIndex == i && currentMinIndex == j && currentMinIndex != i && currentMaxIndex != j) {
+                swap(currentMaxIndex, currentMinIndex, arr);
+                swaps[0]++;
+                continue;
+            }
+            if (currentMinIndex != i) {
+                swap(currentMinIndex, i, arr);
+                swaps[0]++;
+            }
+            if (currentMaxIndex != j) {
+                swap(currentMaxIndex, j, arr);
                 swaps[0]++;
             }
         }
+
+        return swaps[0];
     }
 
-    private static int indexOf(int search, int[] arr) {
-        int returning = -1;
-        for (int i = 0; i < arr.length; ++i) {
-            if (arr[i] == search) {
-                returning = i;
-                break;
+    private static int selectionSortDsc(int[] arr, int[] swaps) {
+
+        for (int i = 0, j = arr.length - 1; i < arr.length - 1; ++i, --j) {
+            int currentMinIndex = i;
+            int currentMaxIndex = j;
+            for (int k = i + 1; k < arr.length; ++k) {
+                if (arr[k] > arr[currentMinIndex]) {
+                    currentMinIndex = k;
+                }
+                if (arr[k] < arr[currentMaxIndex]) {
+                    currentMaxIndex = k;
+                }
+            }
+            if (currentMaxIndex == i && currentMinIndex == j && currentMinIndex != i && currentMaxIndex != j) {
+                swap(currentMaxIndex, currentMinIndex, arr);
+                swaps[0]++;
+                continue;
+            }
+            if (currentMinIndex != i) {
+                swap(currentMinIndex, i, arr);
+                swaps[0]++;
+            }
+            if (currentMaxIndex != j) {
+                swap(currentMaxIndex, j, arr);
+                swaps[0]++;
             }
         }
-        return returning;
+
+        return swaps[0];
     }
 
     private static int[] readInput() {
@@ -64,12 +102,40 @@ public class LilysHomework {
         arr[right] = temp;
     }
 
-    private static void reverseSortedArray(int[] arr) {
+    static void heapify(int[] arr, int length, int currentRoot) {
 
-        for (int k = 0; k < arr.length / 2; ++k) {
-            int temp = arr[k];
-            arr[k] = arr[arr.length - (1 + k)];
-            arr[arr.length - (1 + k)] = temp;
+        int max = currentRoot;
+        int leftChildIndex = 2 * currentRoot + 1;
+        int rightChildIndex = leftChildIndex + 1;
+
+        if (leftChildIndex < length && arr[leftChildIndex] > arr[max]) {
+            max = leftChildIndex;
+        }
+        if (rightChildIndex < length && arr[rightChildIndex] > arr[max]) {
+            max = rightChildIndex;
+        }
+
+        if (max != currentRoot) {
+            swap(currentRoot, max, arr);
+            heapify(arr, length, max);
+        }
+    }
+
+    static void buildHeap(int[] arr) {
+
+        for (int i = arr.length / 2 - 1; i >= 0; --i) {
+            heapify(arr, arr.length, i);
+        }
+    }
+
+    static void heap(int arr[], int[] swaps) {
+
+        buildHeap(arr);
+
+        for (int i = arr.length - 1; i >= 1; --i) {
+            swap(0, i, arr);
+            swaps[0]++;
+            heapify(arr, i, 0);
         }
     }
 
