@@ -7,18 +7,27 @@ public class LilysHomework {
 
     public static void main(String[] args) {
 
-        int[] arr = readInput();
-        int[] swapsA = new int[1];
-        int[] sortedArr = Arrays.copyOf(arr, arr.length);
-        Arrays.sort(sortedArr);
-        findSwapsAscending(arr, sortedArr, swapsA);
-        System.out.println(swapsA[0]);
+        int[] arrAsc = readInput();
+        int[] arrDsc = Arrays.copyOf(arrAsc, arrAsc.length);
+
+        int[] swapsAsc = new int[1];
+        int[] swapsDsc = new int[1];
+
+        int[] sortedArrAsc = Arrays.copyOf(arrAsc, arrAsc.length);
+        int[] sortedArrDsc = Arrays.copyOf(arrAsc, arrAsc.length);
+
+        Arrays.sort(sortedArrAsc);
+        reverseSortedArray(sortedArrDsc);
+
+        findSwapsAsc(arrAsc, sortedArrAsc, swapsAsc);
+
+        System.out.println(swapsAsc[0]);
     }
 
-    private static void findSwapsAscending(int[] arr, int[] sortedArr, int[] swaps) {
-        for(int i = 0; i < arr.length; ++i) {
-            if(arr[i] != sortedArr[i]) {
-                swap(indexOf(arr[i], sortedArr), i, arr);
+    private static void findSwapsAsc(int[] arr, int[] sortedArr, int[] swaps) {
+        for (int i = 0; i < arr.length; ++i) {
+            if (arr[i] != sortedArr[i]) {
+                swap(indexOf(sortedArr[i], arr), i, arr);
                 swaps[0]++;
             }
         }
@@ -26,9 +35,10 @@ public class LilysHomework {
 
     private static int indexOf(int search, int[] arr) {
         int returning = -1;
-        for(int i = 0; i < arr.length; ++i) {
-            if(arr[i] == search) {
-                returning = i; break;
+        for (int i = 0; i < arr.length; ++i) {
+            if (arr[i] == search) {
+                returning = i;
+                break;
             }
         }
         return returning;
@@ -54,5 +64,13 @@ public class LilysHomework {
         arr[right] = temp;
     }
 
+    private static void reverseSortedArray(int[] arr) {
+
+        for (int k = 0; k < arr.length / 2; ++k) {
+            int temp = arr[k];
+            arr[k] = arr[arr.length - (1 + k)];
+            arr[arr.length - (1 + k)] = temp;
+        }
+    }
 
 }
